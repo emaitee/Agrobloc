@@ -73,7 +73,14 @@ export default class extends Component {
     return (
       <Container>
         <Header style={{ backgroundColor: 'green' }}>
-          <Left />
+          <Left>
+            <Icon
+              name="md-arrow-back"
+              type="Ionicons"
+              style={{ color: 'white' }}
+              onPress={() => this.props.navigation.goBack()}
+            />
+          </Left>
           <Body>
             <Text style={{ color: 'white' }}>Agricultural Custodian</Text>
           </Body>

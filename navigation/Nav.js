@@ -6,6 +6,7 @@ import {
   createSwitchNavigator,
 } from 'react-navigation';
 
+import LandingScreen from '../screens/Landing';
 import ChallengeListScreen from '../screens/ChallengeList';
 import LoginScreen from '../screens/Login';
 import SignUpScreen from '../screens/Register';
@@ -29,7 +30,7 @@ const ChallengeStack = createStackNavigator(
       header: null,
     },
   }
-)
+);
 
 const PeerStack = createStackNavigator(
   {
@@ -42,10 +43,11 @@ const PeerStack = createStackNavigator(
       header: null,
     },
   }
-)
+);
 
 const AppStack = createStackNavigator(
   {
+    Landing: LandingScreen,
     ChallengeStack: ChallengeStack,
     // Peer: PeerStack,
     // Challenge: ChallengeScreen,
@@ -60,7 +62,7 @@ const AppStack = createStackNavigator(
 const AuthStack = createStackNavigator(
   {
     Login: LoginScreen,
-    SignUp: SignUpScreen, 
+    SignUp: SignUpScreen,
     //   RecoverPass: RecoverPassScreen,
   },
   {
