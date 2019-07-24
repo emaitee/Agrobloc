@@ -15,7 +15,6 @@ import {
   Icon,
   Fab,
 } from 'native-base';
-import avatar from '../assets/images/robot-dev.png';
 import fire from '../firebase';
 
 const QuestionItem = ({ item, navigation }) => (
