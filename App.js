@@ -25,7 +25,7 @@ export default function App(props) {
         {Platform.OS === 'ios' ? (
           <StatusBar barStyle="default" />
         ) : (
-          <View style={{ height: 25 }} />
+          <View style={{ height: 24 }} />
         )}
         <AppNavigator />
       </View>

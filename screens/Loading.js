@@ -8,7 +8,7 @@ export default class extends React.Component {
   });
 
   componentDidMount() {
-    // fire.auth().signOut()
+    // fire.auth().signOut();
     fire.auth().onAuthStateChanged(user => {
       this.props.navigation.navigate(user ? 'App' : 'Auth');
     });

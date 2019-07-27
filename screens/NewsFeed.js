@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, View, Dimensions } from 'react-native';
+import { ActivityIndicator, View, Dimensions, ImageBackground } from 'react-native';
 import {
   Container,
   Header,
@@ -72,6 +72,10 @@ export default class extends Component {
 
     return (
       <Container>
+        <ImageBackground
+          source={require('../assets/images/login-bg.png')}
+          style={{ width: '100%', height: '100%' }}
+        >
         <Header style={{ backgroundColor: 'green' }}>
           <Left>
             <Icon
@@ -114,7 +118,7 @@ export default class extends Component {
           onPress={() => navigation.navigate('PostChallenge')}
         >
           <Icon name="plus" type="FontAwesome" />
-        </Fab>
+        </Fab></ImageBackground>
       </Container>
     );
   }

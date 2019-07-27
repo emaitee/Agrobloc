@@ -13,44 +13,21 @@ import SignUpScreen from '../screens/Register';
 import PostChallengeScreen from '../screens/PostChallenge';
 import ChallengeScreen from '../screens/Challenge';
 import LoadingScreen from '../screens/Loading';
+import AboutScreen from '../screens/About'
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
 
-const ChallengeStack = createStackNavigator(
-  {
-    ChallengeList: ChallengeListScreen,
-    PostChallenge: PostChallengeScreen,
-    Challenge: ChallengeScreen,
-  },
-  {
-    defaultNavigationOptions: {
-      header: null,
-    },
-  }
-);
-
-const PeerStack = createStackNavigator(
-  {
-    ChallengeList: ChallengeListScreen,
-    PostChallenge: PostChallengeScreen,
-    Challenge: ChallengeScreen,
-  },
-  {
-    defaultNavigationOptions: {
-      header: null,
-    },
-  }
-);
-
 const AppStack = createStackNavigator(
   {
     Landing: LandingScreen,
-    ChallengeStack: ChallengeStack,
-    // Peer: PeerStack,
-    // Challenge: ChallengeScreen,
+    About: AboutScreen,
+    ChallengeList: ChallengeListScreen,
+    PostChallenge: PostChallengeScreen,
+    Challenge: ChallengeScreen,
+    // Peer: PeerScreen,
   },
   {
     defaultNavigationOptions: {

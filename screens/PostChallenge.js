@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, ImageBackground } from 'react-native';
 import {
   Container,
   Header,
@@ -19,8 +19,6 @@ import fire from '../firebase';
 
 export default class extends Component {
   state = {
-    name: '',
-    address: '',
     description: '',
     formLoading: false,
   };
@@ -29,71 +27,89 @@ export default class extends Component {
     this.setState({ formLoading: true });
     const { name, description, address } = this.state;
     let time = new Date();
-    const data = { name, description, address, time };
-    console.log(data);
-
+    const { uid, displayName } = fire.auth().currentUser;
+    // console.log(`uid: ${uid}, displayName: ${displayName}, photoURL: ${photoURL}`);
     fire
       .database()
-      .ref('questions')
-      .push(data)
-      .then(() => {
-        this.setState({
-          name: '',
-          address: '',
-          description: '',
-          formLoading: false,
-        });
-        this.props.navigation.navigate('Home');
-        alert('Challenge Submitted!');
-      })
-      .catch(err => alert(err.message));
+      .ref('users')
+      .child(uid)
+      .once('value', snap => {
+        const userProfile = snap.val();
+
+        if (userProfile) {
+          const data = {
+            uid,
+            name: displayName,
+            description,
+            address: userProfile.address,
+            time,
+          };
+          
+          fire
+            .database()
+            .ref('questions')
+            .push(data)
+            .then(() => {
+              this.setState({
+                name: '',
+                address: '',
+                description: '',
+                formLoading: false,
+              });
+              this.props.navigation.navigate('Home');
+              alert('Challenge Submitted!');
+            })
+            .catch(err => alert(err.message));
+        }
+      });
   };
 
   render() {
     const { formLoading } = this.state;
     return (
       <Container>
-        <Header style={{backgroundColor:'green'}}>
-          <Left>
-            <Icon name="md-arrow-back" type="Ionicons" style={{ color: 'white' }} onPress={() => this.props.navigation.goBack()} />
-          </Left>
-          <Body>
-            <Text style={{ color: 'white' }}>Agricultural Custodian</Text>
-          </Body>
-        </Header>
-        <Content padder>
-          <Form>
-            <Item regular style={{ marginVertical: 5 }}>
-              <Input
-                placeholder="Name"
-                onChangeText={name => this.setState({ name })}
+        <ImageBackground
+          source={require('../assets/images/login-bg.png')}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <Header style={{ backgroundColor: 'green' }}>
+            <Left>
+              <Icon
+                name="md-arrow-back"
+                type="Ionicons"
+                style={{ color: 'white' }}
+                onPress={() => this.props.navigation.goBack()}
               />
-            </Item>
-            <Item regular>
-              <Input
-                placeholder="Address"
-                onChangeText={address => this.setState({ address })}
+            </Left>
+            <Body>
+              <Text style={{ color: 'white' }}>Agricultural Custodian</Text>
+            </Body>
+          </Header>
+          <Content padder>
+            <Form>
+            
+              <Textarea
+                rowSpan={5}
+                bordered
+                placeholder="Description"
+                placeholderTextColor="white"
+                onChangeText={description => this.setState({ description })}
+                style={{ color: 'white' }}
               />
-            </Item>
-            <Textarea
-              rowSpan={5}
-              bordered
-              placeholder="Description"
-              onChangeText={description => this.setState({ description })}
-            />
-          </Form>
-          <Button
-            full
-            style={{ marginVertical: 10, backgroundColor:'green' }}
-            onPress={this.onSubmitForm}
-          >
-            {formLoading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text> Post Challenge </Text>
-            )}
-          </Button>
-        </Content>
+            </Form>
+            <Button
+              full
+              style={{ marginVertical: 10, backgroundColor: 'green' }}
+              onPress={this.onSubmitForm}
+            >
+              {formLoading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text> Post Challenge </Text>
+              )}
+            </Button>
+          </Content>
+        </ImageBackground>
       </Container>
     );
   }

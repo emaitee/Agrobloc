@@ -65,8 +65,8 @@ export default class Login extends Component {
           </View>
           <Content padder>
             <Form style={{ marginVertical: 20 }}>
-              <Item floatingLabel>
-                <Label style={{ color: 'white' }}>Email Address</Label>
+              <Item rounded last>
+                <Label style={{ color: 'white' }}>Email:</Label>
                 <Input
                   keyboardType="email-address"
                   style={{ color: 'white' }}
@@ -74,10 +74,10 @@ export default class Login extends Component {
                   value={email}
                 />
               </Item>
-              <Item floatingLabel>
-                <Label style={{ color: 'white' }}>Password</Label>
+              <Item rounded last style={{ marginVertical: 5 }}>
+                <Label style={{ color: 'white' }}>Password:</Label>
                 <Input
-                  style={{ color: 'white' }}    
+                  style={{ color: 'white' }}
                   onChangeText={password => this.setState({ password })}
                   secureTextEntry
                   autoCapitalize="none"
@@ -86,6 +86,7 @@ export default class Login extends Component {
               </Item>
               <Button
                 block
+                rounded
                 primary
                 onPress={this.handleLogin}
                 style={{ marginVertical: 5, backgroundColor: 'green' }}
@@ -100,13 +101,13 @@ export default class Login extends Component {
               <Button
                 block
                 primary
+                rounded
                 onPress={() => this.props.navigation.navigate('SignUp')}
                 style={{ backgroundColor: 'green' }}
               >
                 <Text>Sign Up</Text>
               </Button>
             </Form>
-            
           </Content>
           <KeyboardSpacer />
         </ImageBackground>

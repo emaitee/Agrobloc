@@ -8,11 +8,22 @@ import {
   Text,
   ImageBackground,
 } from 'react-native';
-import { Container, Icon, Header, Left, Right, Thumbnail } from 'native-base';
+import {
+  Container,
+  Icon,
+  Header,
+  Left,
+  Right,
+  Thumbnail,
+  Button,
+} from 'native-base';
 import fire from '../firebase';
 
+let defaultPhotoURL =
+  'https://firebasestorage.googleapis.com/v0/b/agrobloc-2ac86.appspot.com/o/robot-dev.png?alt=media&token=37b3a971-00db-4ae5-a0c9-f06479514774';
+
 export default class extends React.PureComponent {
-  state = { feeds: [] };
+  state = { feeds: [], avatarUrl: defaultPhotoURL, downloadingAvatar: false };
 
   getLastestFeed = () => {
     fire
@@ -30,8 +41,32 @@ export default class extends React.PureComponent {
   };
 
   componentDidMount() {
+    this.downloadAvatar();
     this.getLastestFeed();
   }
+
+  downloadAvatar = async () => {
+    this.setState({ downloadingAvatar: true });
+    let userData = fire.auth().currentUser;
+    let uid = userData.uid;
+    let userAvatarRef = fire.storage().ref(`profile-images/${uid}`);
+    let defaultPathRef = fire.storage().ref('/robot-dev.png');
+
+    userAvatarRef
+      .getDownloadURL()
+      .then(url => {
+        this.setState({ avatarUrl: url, downloadingAvatar: false });
+      })
+      .catch(err => {
+        defaultPathRef
+          .getDownloadURL()
+          .then(url => {
+            this.setState({ avatarUrl: url, downloadingAvatar: false });
+          })
+          .catch(err => console.log(err));
+      });
+  };
+
   render() {
     return (
       <Container>
@@ -41,15 +76,28 @@ export default class extends React.PureComponent {
         >
           <Header style={{ backgroundColor: 'green' }}>
             <Left>
-              <TouchableOpacity>
-                <Thumbnail
-                  source={require('../assets/images/robot-dev.png')}
-                  style={{ height: 50, width: 50 }}
-                />
+              <TouchableOpacity
+                style={{ alignItems: 'center', justifyContent: 'center' }}
+              >
+                {this.state.downloadingAvatar ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Thumbnail
+                    source={{ uri: this.state.avatarUrl }}
+                    style={{ height: 50, width: 50 }}
+                  />
+                )}
               </TouchableOpacity>
             </Left>
             <Right>
-              <Text style={{ color: 'white' }}>About Us</Text>
+              <Button
+                transparent
+                onPress={() => this.props.navigation.navigate('About')}
+              >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                  About Us
+                </Text>
+              </Button>
             </Right>
           </Header>
           <View
@@ -68,7 +116,7 @@ export default class extends React.PureComponent {
             >
               <TouchableOpacity
                 style={{ width: '48%' }}
-                onPress={() => this.props.navigation.navigate('ChallengeStack')}
+                onPress={() => this.props.navigation.navigate('ChallengeList')}
               >
                 <View
                   style={{
@@ -122,7 +170,7 @@ export default class extends React.PureComponent {
                   borderColor: 'green',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: 240,
+                  height: 300,
                   width: '100%',
                 }}
               >
