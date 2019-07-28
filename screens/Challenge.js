@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, Modal, View, TouchableHighlight } from 'react-native';
 import {
   Container,
   Header,
@@ -12,7 +12,10 @@ import {
   Left,
   Button,
   Icon,
+  Form,
+  Textarea,
 } from 'native-base';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Response = () => (
   <Card>
@@ -40,10 +43,63 @@ const Response = () => (
   </Card>
 );
 
+const NewResponse = ({ modalVisible, setModalVisible }) => (
+  <Modal
+    animationType="slide"
+    transparent={false}
+    visible={modalVisible}
+    transparent
+    onRequestClose={() => {
+      alert('Modal has been closed.');
+    }}
+  >
+    <View
+      style={{
+        marginHorizontal: 22,
+        marginVertical: 100,
+        backgroundColor: 'white',
+      }}
+    >
+      <View>
+        <View style={{ justifyContent: 'flex-end' }}>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <Icon name="close" type="EvilIcons" />
+          </TouchableOpacity>
+        </View>
+
+        <Form>
+          <Textarea rowSpan={5} bordered placeholder="Your response" />
+        </Form>
+
+        <Button success
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <Text>Submit</Text>
+        </Button>
+      </View>
+    </View>
+  </Modal>
+);
+
 export default class CardItemButton extends Component {
+  state = {
+    modalVisible: false,
+  };
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
   render() {
     const { question } = this.props.navigation.state.params;
-    console.log(question);
+    const { modalVisible } = this.state;
+
     return (
       <Container>
         <ImageBackground
@@ -59,6 +115,10 @@ export default class CardItemButton extends Component {
                 onPress={() => this.props.navigation.goBack()}
               />
             </Left>
+            <NewResponse
+              modalVisible={modalVisible}
+              setModalVisible={this.setModalVisible}
+            />
             <Body>
               <Text style={{ color: 'white' }}>Respond to Challenge</Text>
             </Body>
@@ -81,12 +141,17 @@ export default class CardItemButton extends Component {
                       active
                       name="chatbubbles"
                     />
-                    <Text style={{ color: 'green' }}>4 Responses</Text>
+                    <Text style={{ color: 'green' }}>{`${
+                      question.response ? question.responses.length : 0
+                    } Responses`}</Text>
                   </Button>
                 </Left>
 
                 <Right>
-                  <Button transparent>
+                  <Button
+                    transparent
+                    onPress={() => this.setModalVisible(true)}
+                  >
                     <Icon
                       style={{ color: 'green' }}
                       active

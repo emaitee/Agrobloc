@@ -27,7 +27,7 @@ const QuestionItem = ({ item, navigation }) => (
     </Left>
     <Body>
       <Text>{item.name}</Text>
-      <Text note numberOfLines={1}>
+      <Text note numberOfLines={1}> 
         {item.description}
       </Text>
     </Body>

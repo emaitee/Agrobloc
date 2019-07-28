@@ -33,7 +33,8 @@ class QuestionItem extends React.Component {
     const { item } = this.props;
 
     let uid = item.uid;
-    let userAvatarRef = fire.storage().ref(`profile-images/${uid}`);
+    // console.log('uid', uid)
+    let userAvatarRef = fire.storage().ref(`/profile-images/${uid}`);
     let defaultPathRef = fire.storage().ref('/robot-dev.png');
 
     userAvatarRef
@@ -42,6 +43,7 @@ class QuestionItem extends React.Component {
         this.setState({ avatarUrl: url, downloadingAvatar: false });
       })
       .catch(err => {
+        alert(err.toString())
         defaultPathRef
           .getDownloadURL()
           .then(url => {
@@ -69,24 +71,26 @@ class QuestionItem extends React.Component {
           )}
         </Left>
         <Body>
-          <Text>{item.name}</Text>
-          <Text note numberOfLines={1}>
+          <Text style={{color:'white'}}>{item.name}</Text>
+          <Text note numberOfLines={1} style={{color:'white'}}>
             {item.description}
           </Text>
         </Body>
         <Right>
           <Button
+          style={{borderColor:'white'}}
             bordered
-            success
+            // success
             onPress={() => navigation.navigate('Challenge', { question: item })}
           >
-            <Text style={{ color: 'green' }}>View</Text>
+            <Text style={{ color: 'white' }}>View</Text>
           </Button>
         </Right>
       </ListItem>
     );
   }
 }
+
 export default class extends Component {
   state = {
     questions: [],
