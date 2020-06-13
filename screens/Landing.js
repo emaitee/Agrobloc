@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-  ActivityIndicator,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-  Text,
-  ImageBackground,
-} from 'react-native';
+
 import {
   Container,
   Icon,
@@ -42,7 +34,7 @@ export default class extends React.PureComponent {
 
   componentDidMount() {
     this.downloadAvatar();
-    this.getLastestFeed();
+    // this.getLastestFeed();
   }
 
   downloadAvatar = async () => {
